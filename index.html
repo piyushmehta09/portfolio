@@ -185,6 +185,35 @@ body.loaded .animate {
   border-radius: 2px;
 }
 
+/* MOBILE MENU BUTTON */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+  padding: 8px;
+}
+
+.hamburger span {
+  width: 28px;
+  height: 3px;
+  background: var(--gray-900);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -5px);
+}
+
 /* ==========================================================================
    4. HERO SECTION - FINAL PERFECTED
    ========================================================================== */
@@ -225,7 +254,7 @@ body.loaded .animate {
 }
 
 .hero-content h1 {
-  font-size: 42px;
+  font-size: clamp(32px, 8vw, 42px);
   line-height: 1.05;
   margin-bottom: 1.2rem;
   font-weight: 900;
@@ -236,36 +265,8 @@ body.loaded .animate {
   letter-spacing: -0.02em;
 }
 
-.hero-highlight {
-  display: inline-block;
-  background: rgba(250, 204, 21, 0.98) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  padding: 12px 24px !important;
-  margin-left: 8px !important;
-  border-radius: 40px;
-  font-size: 1.1em !important;
-  font-weight: 800;
-  box-shadow: 
-    0 8px 32px rgba(250, 204, 21, 0.6),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-  border: 2px solid rgba(255,255,255,0.4);
-  animation: pulse-glow 3s infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { 
-    box-shadow: 0 8px 32px rgba(250, 204, 21, 0.6);
-    transform: scale(1);
-  }
-  50% { 
-    box-shadow: 0 12px 48px rgba(250, 204, 21, 0.9);
-    transform: scale(1.02);
-  }
-}
-
 .hero-subtitle {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
   line-height: 1.7;
   margin-bottom: 2.5rem;
   color: rgba(255,255,255,0.97) !important;
@@ -723,12 +724,69 @@ body.loaded .animate {
 }
 
 @media (max-width: 768px) {
-  .nav-menu { display: none; }
-  .navbar-container,
-  .container { padding: 0 1.5rem; }
-  .social-grid { grid-template-columns: 1fr; }
-  .about-text { padding: 3rem 2rem; }
-  .about-feature { padding: 1.75rem 1.5rem; }
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    gap: 0;
+    box-shadow: var(--shadow-md);
+  }
+  .nav-menu.active {
+    display: flex;
+  }
+  .nav-link {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .hamburger {
+    display: flex;
+  }
+  .hero {
+    padding: 120px 1.5rem 4rem;
+  }
+  .hero-content h1 {
+    font-size: clamp(28px, 9vw, 36px) !important;
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 4.5vw, 1.1rem) !important;
+  }
+  .container {
+    padding: 0 1.5rem;
+  }
+  .social-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-text {
+    padding: 3rem 2rem;
+  }
+  .about-feature {
+    padding: 1.75rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    height: 70px;
+  }
+  .logo-img {
+    width: 44px;
+    height: 44px;
+  }
+  .hero {
+    padding-top: 110px;
+  }
+  html {
+    scroll-padding-top: 70px;
+  }
 }
   </style>
 </head>
@@ -739,13 +797,18 @@ body.loaded .animate {
       <a href="#hero" class="logo" aria-label="Piyush Mehta Portfolio">
         <img src="pmlogo.png" alt="PML Logo" class="logo-img" loading="lazy">
       </a>
-      <ul class="nav-menu">
+      <ul class="nav-menu" id="navMenu">
         <li><a href="#hero" class="nav-link active" data-section="hero">Home</a></li>
         <li><a href="#about" class="nav-link" data-section="about">About</a></li>
         <li><a href="#projects" class="nav-link" data-section="projects">Work</a></li>
         <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
         <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
       </ul>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   </nav>
 
@@ -946,6 +1009,7 @@ body.loaded .animate {
       renderProjects();
       initNavbar();
       initNavigation();
+      initMobileMenu();
       initScrollReveal();
       initSkillAnimations();
     }
@@ -965,6 +1029,24 @@ body.loaded .animate {
       const navbar = document.getElementById('navbar');
       window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 50);
+      });
+    }
+
+    function initMobileMenu() {
+      const hamburger = document.getElementById('hamburger');
+      const navMenu = document.getElementById('navMenu');
+
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+      });
+
+      // Close menu when clicking on a link
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          navMenu.classList.remove('active');
+        });
       });
     }
 
