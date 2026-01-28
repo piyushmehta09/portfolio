@@ -1,3 +1,21 @@
+# robots.txt for Piyush Mehta Portfolio
+# Allows all search engines to crawl everything
+
 User-agent: *
 Allow: /
+
+# Sitemap location
 Sitemap: https://piyushmehta09.github.io/Portfolio/sitemap.xml
+
+# Crawl-delay for good behavior
+Crawl-delay: 0
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

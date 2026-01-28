@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://piyushmehta09.github.io/Portfolio/</loc>
@@ -30,4 +30,56 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+</urlset> -->
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Main Portfolio Page -->
+  <url>
+    <loc>https://piyushmehta09.github.io/Portfolio/</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://piyushmehta09.github.io/Portfolio/portfolio.png</image:loc>
+      <image:title>Piyush Mehta - Full Stack Developer</image:title>
+      <image:caption>Professional Full Stack Developer and UI/UX Designer from Jodhpur, Rajasthan</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- About Section -->
+  <url>
+    <loc>https://piyushmehta09.github.io/Portfolio/#about</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Projects Section -->
+  <url>
+    <loc>https://piyushmehta09.github.io/Portfolio/#projects</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Skills Section -->
+  <url>
+    <loc>https://piyushmehta09.github.io/Portfolio/#skills</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Contact Section -->
+  <url>
+    <loc>https://piyushmehta09.github.io/Portfolio/#contact</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
 </urlset>
