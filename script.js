@@ -47,6 +47,157 @@
     })();
 
     // ============================================
+// 1. COMPONENT LOADER (Sabse Pehle)
+// ============================================
+async function loadComponents() {
+    const components = [
+        { id: 'navbar-placeholder', file: 'navbar.html' },
+        { id: 'hero-placeholder', file: 'hero.html' },
+        { id: 'about-placeholder', file: 'about.html' },
+        { id: 'projects-placeholder', file: 'projects.html' },
+        { id: 'skills-placeholder', file: 'skills.html' },
+        { id: 'contact-placeholder', file: 'contact.html' },
+        { id: 'footer-placeholder', file: 'footer.html' }
+    ];
+
+    for (const comp of components) {
+        const target = document.getElementById(comp.id);
+        if (target) {
+            try {
+                const response = await fetch(`./components/${comp.file}`);
+                if (!response.ok) throw new Error(`Failed to load ${comp.file}`);
+                const html = await response.text();
+                target.innerHTML = html;
+            } catch (err) {
+                console.error("Error loading component:", err);
+            }
+        }
+    }
+    // Saari files load hone ke baad portfolio ka main logic start karein
+    initPortfolioLogic();
+}
+
+// Page load par components load karna shuru karein
+window.addEventListener('DOMContentLoaded', loadComponents);
+
+// ============================================
+// 2. MAIN PORTFOLIO LOGIC (Files Load Hone Ke Baad)
+// ============================================
+function initPortfolioLogic() {
+    renderProjects();
+    initNavbar();
+    initScrollReveal();
+    initSkillBars();
+}
+
+// --- Project Rendering ---
+function renderProjects() {
+    const projects = [
+        { title: 'Surgical Equipment E-commerce', desc: 'Full-stack platform with secure payment and admin dashboard.', tech: ['PHP', 'MySQL', 'Bootstrap'] },
+        { title: 'Portfolio CMS', desc: 'Headless CMS with REST API for dynamic portfolio websites.', tech: ['JavaScript', 'PHP', 'API'] },
+        { title: 'Employee Attendance System', desc: 'Real-time tracking with reporting dashboard and analytics.', tech: ['PHP', 'MySQL', 'Charts.js'] }
+    ];
+
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = projects.map((project, i) => `
+        <div class="project-card reveal">
+            <div class="project-number">0${i + 1}</div>
+            <h3>${project.title}</h3>
+            <p>${project.desc}</p>
+            <div class="tech-stack">${project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
+        </div>
+    `).join('');
+}
+
+// --- Navbar & Mobile Menu ---
+function initNavbar() {
+    const navbar = document.getElementById('navbar');
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    }
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
+
+    // Smooth Scroll Logic
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                navMenu?.classList.remove('active');
+                hamburger?.classList.remove('active');
+            }
+        });
+    });
+}
+
+// --- Scroll Reveal & Skill Bars ---
+function initScrollReveal() {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+
+function initSkillBars() {
+    const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.width = entry.target.dataset.width;
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    document.querySelectorAll('.skill-bar-fill').forEach(bar => skillObserver.observe(bar));
+}
+
+// ============================================
+// 3. PREMIUM LOADING ANIMATION (Self-Executing)
+// ============================================
+(function() {
+    const loaderWrapper = document.getElementById('loaderWrapper');
+    const loadingProgress = document.getElementById('loadingProgress');
+    const loadingPercentage = document.getElementById('loadingPercentage');
+    const contentWrapper = document.querySelector('.content-wrapper');
+    
+    if (!loaderWrapper) return;
+
+    let progress = 0;
+    const loadingInterval = setInterval(() => {
+        progress += 2;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(loadingInterval);
+            setTimeout(() => {
+                loaderWrapper.classList.add('hidden');
+                contentWrapper?.classList.add('visible');
+                document.body.style.overflow = 'auto';
+            }, 500);
+        }
+        if (loadingProgress) loadingProgress.style.width = progress + '%';
+        if (loadingPercentage) loadingPercentage.textContent = Math.round(progress) + '%';
+    }, 50);
+    
+    document.body.style.overflow = 'hidden';
+})();
+
+    // ============================================
     // LOADING SCREEN CODE PARTICLES
     // ============================================
     (function() {
